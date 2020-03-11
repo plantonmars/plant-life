@@ -1,0 +1,67 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+
+    {% if isLighting %}
+        <h2>Plant Gallery - {{ lighting }} Lighting</h2>
+    {% elif isType %}
+        <h2>Plant Gallery - {{ plant_type }}</h2>
+    {% else %}
+        <h2>Plant Gallery</h2>
+    {% endif %}
+
+{% endblock page_header %}
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+    <div class="alert alert-warning">It seems like you're not logged in. To have full access to our site we
+        recommend you <a class="alert-link" href="{% url 'users:login' %}">login</a> or
+        <a class="alert-link" href="{% url 'users:register' %}">register.</a></div>
+
+{% endif %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+            {{message}}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="row">
+
+    <div class="col-lg-6 col-md-6">
+        <form method="get" class="form">
+            {% bootstrap_form type_form %}
+            {% buttons %}
+                <button class="btn btn-success" name="type_form">Search by Type</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <form method="get" class="form">
+
+            {% bootstrap_form lighting_form %}
+
+            {% buttons %}
+                <button class="btn btn-success" name="lighting_form">Search by Lighting</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
+</div>
+
+
+{% include 'plant_gallery/display_plants.html' %}
+
+<div class="mb-5">
+    {% if user.is_authenticated %}
+        <a href="{% url 'plant_gallery:create_plant' %}"><button class="btn btn-primary">Create A Plant!</button></a>
+    {% endif %}
+</div>
+
+{% endblock content %}

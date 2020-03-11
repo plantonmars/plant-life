@@ -1,0 +1,90 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+
+{% if isAdopting %}
+    <h2>Adopting: {{ plant }}</h2>
+{% else %}
+    <h2> You are viewing: {{ plant }} </h2>
+{% endif %}
+
+{% endblock page_header %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="card text-center">
+    <h4 class="card-header">
+        <a href="{% url 'plant_gallery:plant' plant.id %}">{{plant}}</a>
+    </h4>
+    <div class="mx-auto mt-5">
+        <img style="border-radius:25px" src={{plant.img_url}} height="100" width="100"><hr>
+    </div>
+
+    <div class="row mx-auto mb-2">
+       {% if not isAdopting %}
+            <div class="text-left col-lg-6 col-md-6 col-sm-12">
+                <strong>Owner:</strong> <a href="{% url 'plant_network:profile' plant.owner.username %}">{{ plant.owner.username }}
+                 <br /></a>
+                <strong>Species:</strong> {{ plant.species|title }}<br/>
+                <strong>Type:</strong> {{ plant.plant_type }}<br />
+                <strong>Lighting Condition:</strong> {{ plant.lighting }}<br />
+                <hr>
+                <strong>Description:</strong> {{ plant.description }}<br />
+                <strong>Level:</strong> {{ plant.level }}<br />
+                {% if plant.level == plant.max_level %}
+                    <strong>Exp:</strong> MAX<br />
+                {% else %}
+                    <strong>Exp:</strong> {{ plant.exp }}/{{ plant.max_exp }}<br />
+                {% endif %}
+                <hr>
+                <strong>Cost:</strong> {{ plant.cost }} PlantTokens<br />
+            </div>
+            {% if user.is_authenticated %}
+                {% if user.username == plant.owner.username %}
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <h4>Plant Menu</h4>
+                        <a href="{% url 'plant_gallery:edit_plant' plant.id %}"><button class="btn btn-primary">
+                            Customize</button></a>
+                        <form method="get" class="mt-1">
+                            <button class="btn btn-danger" name="discard">Discard</button>
+                        </form>
+                        {% if not plant.level == plant.max_level %}
+                            <form method="get" class="mt-1">
+                                <button class="btn btn-success" name="fertilize">Fertilize</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                {% else %}
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                        <a href="{% url 'plant_gallery:purchase_plant' plant.id %}"><button class="btn btn-primary">
+                            I'm Interested!</button></a>
+                    </div>
+
+                {% endif %}
+            {% endif %}
+        {% elif isAdopting %}
+            <div class="alert alert-dark col-lg-12 mx-auto">
+                By clicking the button below you agree to purchase {{plant}} for {{plant.cost}} PlantTokens
+                and become its new owner.
+            </div>
+            <form method="get" action="{% url 'plant_gallery:purchase_plant' plant.id %}" class="form mx-auto">
+               {% buttons %}
+                    <button name="submit" class="btn btn-primary">Purchase Plant</button>
+               {% endbuttons %}
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

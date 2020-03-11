@@ -1,0 +1,115 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    {% if first_visit %}
+       <div class="row text-center">
+
+            <div class="col-lg-2 col-sm-6">
+                <img src="https://i.imgur.com/m8dUPwv.png">
+            </div>
+
+            <div class="alert alert-dark col-lg-10 col-sm-6 mt-2 text-left">
+                <strong>Cloud:</strong> Hi there! Welcome to Plant Life, a virtual community of plants that come alive thanks
+                to users such as yourself! We are just getting our community started, so keep checking back for new features.
+                To start you off, I have added <strong>35 PlantTokens</strong> to your balance.
+                Please use them wisely as there is no
+                current way to obtain more tokens unless you make a donation through our <strong>"Add Funds"</strong> section.
+                <br /><br />
+                <strong>Plant Life v1.0 - Notes</strong><br />
+                <hr>
+                <strong>Plant Network</strong>: With our network you have access to your own user profile which you can see
+                here. You may also add other users as friends and accepts invitations and send messages through your Inbox.
+                <br /><hr>
+                <strong>Item System</strong>: Through our currency PlantTokens you  may purchase materials over at our shop.
+                Materials can be used to create your very own plant or used for other special purposes.<br /><hr>
+                <strong>Plant System</strong>: You will be able to create a plant, level it up, customize it and if you
+                would like you can put it up for sale for other users to see!
+            </div>
+
+        </div>
+    {% endif %}
+    <h2>{{ profile.display_name }}</h2>
+{% endblock page_header %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+{% endif %}
+
+{% if profile.owner == user %}
+    <a href="{% url 'plant_network:edit_profile' %}"><button class="btn btn-primary">
+        Edit Profile</button></a>
+{% elif isFriend %}
+    <a href="{% url 'plant_network:unfriend' profile.owner.username %}">
+        <button class="btn btn-danger">Unfriend</button></a>
+{% else %}
+    <a href="{% url 'plant_network:request_sent' profile.owner.username %}">
+        <button class="btn btn-primary">Add Friend</button></a>
+{% endif %}
+
+<div class="row mt-2 mb-2">
+
+    <div class="col-lg-6 col-md-6">
+        <img height="350" width="350" src="{{profile.profile_img}}"><br />
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <div class="card" style="width:25rem;">
+            <div class="card-body">
+                <h3 class="card-title">Bio</h3>
+                {{ profile.bio }}
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="row" style="padding-top:5%;">
+        <div class="col-lg-6 col-md-6">
+        <h2>Friends List</h2>
+        <div class="row">
+        {% for friend in friends %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img height="100" width="100" src="{{ friend.profile.profile_img }}"/><br />
+                <a href="{% url 'plant_network:profile' friend.profile.owner.username %}">
+                    {{ friend.profile.owner.username }}</a>
+            </div>
+        {% empty %}
+            <p class="mx-auto">
+                User has no friends :(
+            </p>
+        {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <h2>Plants</h2>
+        <div class="row">
+            {% for plant in plants %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <img height="100" width="100" src="{{ plant.img_url }}"/><br />
+                    {% if plant.for_sale %}
+                        <a href="{% url 'plant_gallery:plant' plant.id %}">
+                            {{ plant }}</a>
+                    {% else %}
+                        {{ plant }}
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="mx-auto">
+                    User has no plants. :(
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+

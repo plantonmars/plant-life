@@ -1,0 +1,75 @@
+{% load bootstrap4 %}
+
+<div class="row">
+
+    {% for plant in plants %}
+
+        {% if plant.for_sale or isMyPlants %}
+
+            <div class="col-lg-4 col-md-6 mb-2">
+                <div class="card mb-2 h-100">
+                    <h4 class="card-header">
+                        <a href="{% url 'plant_gallery:plant' plant.id %}">{{plant}}</a>
+                    </h4>
+                    <div class="mx-auto mt-2">
+                        <img style="border-radius:25px" class="card-img-top" src={{plant.img_url}} height="100" width="100"><hr>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-text">
+                            {% if not isMyPlants %}
+                            <strong>Owner:</strong> <a href="{% url 'plant_network:profile' plant.owner.username %}">{{ plant.owner.username }}
+                                 <br /></a>
+                            {% endif %}
+                            <strong>Species:</strong> {{ plant.species|title }}<br/>
+                            <strong>Type:</strong> {{ plant.plant_type }}<br />
+                            <strong>Lighting Condition:</strong> {{ plant.lighting }}<br />
+                            <hr>
+                            <strong>Description:</strong> {{ plant.description|truncatechars:50 }}<br />
+                            <hr>
+                            <strong>Level:</strong> {{ plant.level }}<br />
+                            {% if plant.level == plant.max_level %}
+                                <strong>Exp:</strong> MAX<br />
+                            {% else %}
+                                <strong>Exp:</strong> {{ plant.exp }}/{{ plant.max_exp }}<br />
+                            {% endif %}
+                        </p>
+
+                        {% if user.is_authenticated %}
+                            {% if user.username == plant.owner.username %}
+                                <div class="mb-1">
+                                    <a href="{% url 'plant_gallery:edit_plant' plant.id %}">
+                                        <button class="btn btn-primary">Customize</button></a>
+                                </div>
+                                <div class="mb-1">
+                                    <a href="{% url 'plant_gallery:plant' plant.id %}">
+                                        <button class="btn btn-primary">Visit</button>
+                                    </a>
+                                </div>
+
+                            {% else %}
+                                <a href="{% url 'plant_gallery:purchase_plant' plant.id %}">
+                                    <button class="btn btn-primary">I'm Interested!</button></a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% empty %}
+
+        {% if isMyPlants %}
+            <div class="alert alert-dark ml-3">
+                You don't have any plants yet! Feel free to create one <a class="alert-link" href=
+                    "{% url 'plant_gallery:create_plant' %}">here!</a>
+            </div>
+        {% else %}
+            <div class="alert alert-dark ml-3">
+                No results found, but we're always looking to add new plants to the community!
+            </div>
+        {% endif %}
+
+    {% endfor %}
+</div>

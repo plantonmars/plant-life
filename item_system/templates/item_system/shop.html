@@ -1,0 +1,48 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h2>Shop</h2>
+{% endblock page_header %}
+
+
+{% block content %}
+
+<div class="row text-center">
+
+    <div class="col-lg-2 col-sm-6">
+        <img src="https://i.imgur.com/m8dUPwv.png">
+    </div>
+
+    <div class="alert alert-dark col-lg-10 col-sm-6 mt-2">
+        <strong>Cloud:</strong> Hello and welcome to our shop, here you can find materials to grow your own plants.
+    </div>
+
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+{% endif %}
+
+
+{% if items %}
+    <div class="row mb-2">
+    {% for item in items %}
+        <div class="card col-lg-4 col-md-6 col-sm-12">
+            <div class="card-body mx-auto">
+                <h2 class="card-title">{{item.name}}</h2><img height="100" width="100" src="{{item.item_img}}">
+                <p class="card-text">
+                    {{item.description}}<br />
+                    Cost: {{item.cost}} PlantTokens<br />
+                </p>
+                <a href="{% url 'item_system:purchase_item' item.id %}">
+                    <button class="btn btn-primary">Purchase</button></a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock content %}

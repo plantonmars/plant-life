@@ -1,0 +1,53 @@
+{% load custom_tags %}
+{% load bootstrap4 %}
+
+<style>
+
+    body {
+        background: url("https://images.unsplash.com/photo-1464465474479-26aa7f69b834?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1947&q=80");
+        background-size: cover;
+        background-position: center;
+
+    }
+
+    h1, h3, hr {
+        color: white;
+        text-shadow: 0px 4px 3px black,
+                     0px 8px 13px pink;
+
+    }
+
+
+</style>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
+        <title>Plant Life</title>
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery='full' %}
+    </head>
+
+    <body>
+
+       {% include 'plant_gallery/nav.html' %}
+
+
+        <div class="container text-center" style="padding-top:20%;" >
+            <div class="row">
+                <div class="mx-auto">
+                    <div class="col-lg-12">
+                        <h1 class="display-1">Plant Life</h1>
+                        <hr>
+                        <h3>Start your own plant family!</h3>
+                        <a href="{% url 'plant_gallery:gallery' %}">
+                            <button class="btn btn-primary btn-lg mt-2">Browse Plants</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+

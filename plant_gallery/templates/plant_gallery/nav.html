@@ -1,0 +1,67 @@
+{% load custom_tags %}
+{% load bootstrap4 %}
+
+<nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+    <a class="navbar-brand" href="{% url 'plant_gallery:index' %}">
+        Plant Life
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'plant_gallery:gallery' %}">Browse Plants</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'item_system:shop' %}">Shop</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <span class="navbar-text">(Tokens: {{ user|current_balance }})</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'plant_network:profile' user.username %}">
+                        {{user.username}}</a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link" href="{% url 'plant_gallery:my_plants' %}">My Plants</a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link" href="{% url 'plant_gallery:create_plant' %}">Create Plant</a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link" href="{% url 'item_system:inventory' %}">Inventory</a>
+                </li>
+                <li>
+                    {% if user|unread == 0 %}
+                        <a class="nav-link" href="{% url 'plant_network:messages' %}">
+                            Inbox</a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'plant_network:messages' %}">
+                            Inbox <span class="badge badge-dark">{{ user|unread }}</span></a>
+                    {% endif %}
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'plant_gallery:add_funds' %}">Add Funds</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:login' %}">Log in</a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>

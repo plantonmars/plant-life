@@ -1,0 +1,27 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+
+    <h2>Adding Funds</h2>
+
+{% endblock page_header %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} role='alert'">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" action="{% url 'plant_gallery:add_funds' %}" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% buttons %}
+        <button name="submit" class="btn btn-success">Make Payment</button>
+    {% endbuttons %}
+</form>
+
+{% endblock content %}

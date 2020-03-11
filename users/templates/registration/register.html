@@ -1,0 +1,26 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h2>Create An Account</h2>
+{% endblock page_header %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" action="{% url 'users:register' %}" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% buttons %}
+        <button class="btn btn-primary" name="submit">Register</button>
+    {% endbuttons %}
+
+</form>
+
+{% endblock content %}

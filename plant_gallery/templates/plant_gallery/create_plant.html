@@ -1,0 +1,50 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h2>Create Plant</h2>
+{% endblock page_header %}
+
+{% block content %}
+
+{% if pot and seeds %}
+    <div class="alert alert-dark">
+        You have the required materials! Let's get started, please select below the type of plant
+        you wish to create.
+    </div>
+    <div class="row text-center">
+            {% for seed in seeds %}
+                <div class="card col-lg-4 col-md-6 col-sm-12">
+                    <div class="card-body">
+                        <h2 class="card-title">{{seed.name}}</h2>
+                        <img height="100" width="100" src="{{seed.item_img}}">
+                        <p class="card-text">
+
+                        </p>
+                        <form method="get">
+                            <button name="plant" value="{{seed.name}}"
+                                    class="btn btn-primary">Plant!</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% elif pot %}
+    <div class="alert alert-warning">
+        You have a pot, but you need some seeds to create a plant!
+    </div>
+    <a href="{% url 'item_system:shop' %}"><button class="btn btn-primary">To The Shop!</button></a>
+{% elif seeds %}
+    <div class="alert alert-warning">
+        You have seeds, but you need a pot to create a plant!
+    </div>
+    <a href="{% url 'item_system:shop' %}"><button class="btn btn-primary">To The Shop!</button></a>
+{% else %}
+    <div class="alert alert-warning">
+        You don't have a pot nor seeds, both are needed to create a plant!
+    </div>
+    <a href="{% url 'item_system:shop' %}"><button class="btn btn-primary">To The Shop!</button></a>
+{% endif %}
+
+
+{% endblock content %}

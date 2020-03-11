@@ -1,0 +1,55 @@
+{% extends 'plant_gallery/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+
+    <h2>Message</h2>
+
+{% endblock page_header %}
+
+{% block content %}
+
+<div class="card mb-2 mx-auto" style="width: 30rem;">
+    <div class="card-body">
+        <div class="card-title">
+            <strong>Subject: </strong>{{ message.subject }}
+            <hr>
+            <strong>From: </strong><a href="{% url 'plant_network:profile' message.sent_from %}">{{ message.sent_from }}
+            </a><hr>
+        </div>
+        <div class="card-text" style="padding-bottom:5%;">
+            <p>
+                {{ message.body }}
+            </p>
+        </div>
+        {% if message.isRequest %}
+            <form method="get" class="mb-2" style="display:inline">
+                <button class="btn btn-success" name="accept">Accept Friend Request</button>
+            </form>
+            <form request="get" style="display:inline">
+                <button class="btn btn-danger" name="delete">Delete Request</button>
+            </form>
+        {% else %}
+            {% if message.sent_from == 'PLANT ADMIN' %}
+                <form request="get" style="display:inline">
+                    <button class="btn btn-danger" name="delete">Delete Message</button>
+                </form>
+            {% else %}
+            <form request="get" style="display:inline">
+                <button class="btn btn-danger" name="delete">Delete Message</button>
+            </form>
+            <a href="{% url 'plant_network:reply' message.id %}"><button class="btn btn-success" name="reply">Reply</button></a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="{% url 'plant_network:messages' %}">
+        <button class="btn btn-primary">
+            Back to Messages
+        </button>
+    </a>
+</div>
+
+{% endblock content %}

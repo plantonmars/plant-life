@@ -1,0 +1,19 @@
+{% extends 'plant_gallery/base.html' %}
+
+{% block page_header %}
+
+<h2>My Plants</h2>
+
+{% endblock page_header %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}} role='alert'">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+{% include 'plant_gallery/display_plants.html' %}
+
+{% endblock content %}
