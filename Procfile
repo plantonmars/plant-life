@@ -1,1 +1,1 @@
-web: unicorn plant_shop.wsgi --log-file -
+web: gunicorn plant_shop.wsgi --log-file -
